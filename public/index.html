@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Binance-live</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
+  </head>
+  <body>
+    <style>
+      body, * {
+        --green-color: #33ff00;
+        --red-color: #ff000040;
+        margin: 0;
+        background-color: black;
+        color: var(--green-color);
+        font-family: Roboto;
+
+        --mdc-theme-primary: var(--green-color);
+        --mdc-theme-on-primary: black;
+        --mdc-theme-text-primary-on-background: var(--green-color);
+        --mdc-theme-surface: #0e0e0e;
+
+        --mdc-text-field-outlined-idle-border-color: var(--green-color);
+        --mdc-text-field-outlined-hover-border-color: var(--green-color);
+        --mdc-text-field-label-ink-color: var(--green-color);
+        --mdc-text-field-ink-color: var(--green-color);
+        --mdc-text-field-fill-color: #001302;
+
+        --mdc-dialog-heading-ink-color: var(--green-color);
+        --mdc-dialog-content-ink-color: var(--green-color);
+
+        --mdc-select-ink-color: var(--green-color);
+        --mdc-select-label-ink-color: var(--green-color);
+        /* --mdc-select-focused-ink-color: var(--green-color); */
+        --mdc-select-outlined-idle-border-color: var(--green-color);
+        --mdc-select-outlined-hover-border-color: var(--green-color);
+      }
+    </style>
+
+    <app-container id=app></app-container>
+
+    <settings-dialog id=settingsDialog></settings-dialog>
+
+    <mwc-snackbar id=snackbar></mwc-snackbar>
+
+    <script type=module src="/app.js"></script>
+    <script>
+      window.toast = function (labelText, timeoutMs = 4000) {
+        snackbar.labelText = labelText;
+        snackbar.timeoutMs = timeoutMs;
+        snackbar.open = true;
+      }
+    </script>
+  </body>
+</html>
