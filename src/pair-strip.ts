@@ -1,7 +1,8 @@
 import { css, html, LitElement, nothing, PropertyDeclaration } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
-import { openCryptowatchLink } from './util';
+import { breakPair, openCryptowatchLink } from './util';
 import { VolumeChartElement } from './volume-chart-element';
+import coinmarketcap from 'coinmarketcap-s2l'
 
 @customElement('pair-strip')
 export class PairStrip extends LitElement {
@@ -14,6 +15,7 @@ export class PairStrip extends LitElement {
   :host {
     display: flex;
     align-items: flex-start;
+    justify-content: space-between;
     border: 1px solid var(--green-color);
     padding: 6px;
     padding-bottom: 0;
@@ -25,8 +27,8 @@ export class PairStrip extends LitElement {
 
   render () {
     return html`
-    <span style="flex:1"
-      @click=${() => openCryptowatchLink(this.pair)}>${this.pair}</span>
+    <span style="cursor:pointer"
+      @click=${() => window.open(coinmarketcap(breakPair(this.pair)!.symbol), '_blank')}>${this.pair}</span>
     <volume-chart-element .pair=${this.pair}></volume-chart-element>
     `
   }

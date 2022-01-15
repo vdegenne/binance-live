@@ -12,13 +12,18 @@ declare global {
 export type UpdaterState = 'stopped'|'waiting'|'pending';
 
 export class KlinesManager {
-  public klines: { [pair: string]: Kline[] } = {}
+  private _klines: { [pair: string]: Kline[] } = {}
   private pairUpdateTimestampMap: {[pairname: string]: number} = {}
 
   private state: UpdaterState = 'stopped';
 
-  private _timeout?: NodeJS.Timeout;
+  public get klines () {
+    return Object.fromEntries(
+      Object.entries(this._klines).filter(([p, k]) => window.pairsManager.pairs.includes(p))
+    )
+  }
 
+  private _timeout?: NodeJS.Timeout;
   initiateTimeout (timeoutMs?: number) {
     if (!timeoutMs) {
       timeoutMs = window.settingsDialog.settings.refreshEvery * 1000
@@ -83,7 +88,7 @@ export class KlinesManager {
     this.pairUpdateTimestampMap[`${symbol}/${quote}`] = Date.now();
     // window.app.updateStrip(pair)
     // this.debounceUpdateAppView()
-    return this.klines[`${symbol}/${quote}`] = parseRawKlines(raw)
+    return this._klines[`${symbol}/${quote}`] = parseRawKlines(raw)
   }
 
   private _appUpdateViewDebouncer?: NodeJS.Timeout;
@@ -99,7 +104,7 @@ export class KlinesManager {
   }
 
   getSortedPairsByProgressiveVolumes (): [string, Kline[]][] {
-    const map = Object.entries(this.klines).map(function ([pair, klines]) {
+    const map = Object.entries(this._klines).map(function ([pair, klines]) {
       let candle, previous, i = 0
       while (1) {
         candle = klines[klines.length - 1 - (i)]

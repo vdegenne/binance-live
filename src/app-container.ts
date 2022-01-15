@@ -34,8 +34,8 @@ export class AppContainer extends LitElement {
     return html`
     <session-time-progress></session-time-progress>
 
-    <header class="flex" style="align-items:center;justify-content:space-between">
-      <img src="/img/icon.png" width="68px" style="margin:8px 0 0 5px">
+    <header class="flex" style="align-items:flex-start;justify-content:space-between">
+      <img src="./img/icon.png" width="68px" style="margin:8px 0 0 5px">
       <!-- <span style="flex:1">binance-live</span> -->
       <mwc-icon-button icon="settings"
         @click=${() => window.settingsDialog.open()}></mwc-icon-button>
@@ -57,14 +57,7 @@ export class AppContainer extends LitElement {
     window.klinesManager.update()
   }
 
-  // requestUpdate(name?: PropertyKey, oldValue?: unknown, options?: PropertyDeclaration<unknown, unknown>): void {
-  //   // super.requestUpdate(name, oldValue, options)
-  //   this.updateComplete.then(() => {
-  //     this.pairStrips.forEach(el => el.requestUpdate())
-  //   })
-  // }
-
-  private onAddPairButtonClick() {
+  private async onAddPairButtonClick() {
     let pairname = this.pairInput.value
     if (pairname === '') return;
     if (!pairname.includes('/')) {
@@ -78,7 +71,7 @@ export class AppContainer extends LitElement {
       return;
     }
     window.pairsManager.addPair(symbol, quote)
-    window.klinesManager.updatePair(pairname)
+    await window.klinesManager.updatePair(pairname)
     this.requestUpdate()
     this.pairInput.value = ''
     window.toast(`Pair ${symbol}/${quote} added`)

@@ -20,7 +20,7 @@ export class PairsManager {
     const pair = `${symbol}/${quote}`
     if (this.pairs.includes(pair)) { return }
     this.pairs.push(pair)
-    // We also fetch the pair's infos (klines)
+    window.location.hash = `${window.location.hash},${pair}`
     return pair
   }
 
