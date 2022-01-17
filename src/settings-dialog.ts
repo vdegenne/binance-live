@@ -131,7 +131,15 @@ export class SettingsDialog extends LitElement {
   }
 
   save() {
-    this.settings = this.constrainSettingsObject(this._settings);
+    const settings = this.constrainSettingsObject(this._settings);
+    let shouldUpdate = false
+    if (settings.unit !== this.settings.unit || settings.width !== this.settings.width) {
+      shouldUpdate = true
+    }
+    this.settings = settings
+    if (shouldUpdate) {
+      window.klinesManager.update()
+    }
     localStorage.setItem('binance-live:settings', JSON.stringify(this.settings))
     window.toast('Settings saved')
   }

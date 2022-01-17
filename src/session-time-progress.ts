@@ -1,6 +1,6 @@
 import { css, html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { percentRatio } from './util';
+import { valueToPercent } from './util';
 
 @customElement('session-time-progress')
 export class SessionTimeProgress extends LitElement {
@@ -14,10 +14,10 @@ export class SessionTimeProgress extends LitElement {
     let progress
     switch (window.settingsDialog.settings.unit) {
       case 'h':
-        progress = percentRatio(60, (new Date).getMinutes()) / 100
+        progress = valueToPercent(60, (new Date).getMinutes()) / 100
       break;
       case 'm':
-        progress = percentRatio(60, (new Date).getSeconds()) / 100
+        progress = valueToPercent(60, (new Date).getSeconds()) / 100
         break;
     }
 

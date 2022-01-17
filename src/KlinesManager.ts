@@ -56,19 +56,22 @@ export class KlinesManager {
   }
 
   async update () {
+    // Do not update again if it is already in a pending state
+    if (this.state === 'pending') { return }
     this.state = 'pending'
-    await Promise.all(
-    window.pairsManager.pairs.map(async (pair) => {
-      await this.updatePair(pair)
-      // const [symbol, quote] = pair.split('/')
-      // const raw = await fetchPairKlines(
-      //   `${symbol}${quote}`,
-      //   window.settingsDialog.settings.unit,
-      //   Date.now() - ms(`${window.settingsDialog.settings.width}${window.settingsDialog.settings.unit}`)
-      // )
-      // this.klines[pair] = parseRawKlines(raw)
-    })
-    )
+    await Promise.all([
+      window.changesManager.update(),
+      ...window.pairsManager.pairs.map(async (pair) => {
+        await this.updatePair(pair)
+        // const [symbol, quote] = pair.split('/')
+        // const raw = await fetchPairKlines(
+        //   `${symbol}${quote}`,
+        //   window.settingsDialog.settings.unit,
+        //   Date.now() - ms(`${window.settingsDialog.settings.width}${window.settingsDialog.settings.unit}`)
+        // )
+        // this.klines[pair] = parseRawKlines(raw)
+      })
+    ])
     // setTimeout(() => console.log(this.klines), 100)
     window.app.requestUpdate()
     this.initiateTimeout()
@@ -104,7 +107,7 @@ export class KlinesManager {
   }
 
   getSortedPairsByProgressiveVolumes (): [string, Kline[]][] {
-    const map = Object.entries(this._klines).map(function ([pair, klines]) {
+    const map = Object.entries(this.klines).map(function ([pair, klines]) {
       let candle, previous, i = 0
       while (1) {
         candle = klines[klines.length - 1 - (i)]

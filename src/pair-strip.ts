@@ -1,6 +1,6 @@
 import { css, html, LitElement, nothing, PropertyDeclaration } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
-import { breakPair, openCryptowatchLink } from './util';
+import { breakPair, openCryptowatchLink, percentTemplate } from './util';
 import { VolumeChartElement } from './volume-chart-element';
 import coinmarketcap from 'coinmarketcap-s2l'
 
@@ -26,11 +26,19 @@ export class PairStrip extends LitElement {
   `
 
   render () {
+    this.pair = this.pair.split(' ')[0]
     return html`
-    <span style="cursor:pointer"
-      @click=${() => window.open(coinmarketcap(breakPair(this.pair)!.symbol), '_blank')}>${this.pair}</span>
+    <div style="display:flex;align-items:center">
+      <span style="cursor:pointer"
+        @click=${() => window.open(coinmarketcap(breakPair(this.pair)!.symbol), '_blank')}>${this.pair}</span>
+      ${percentTemplate(window.changesManager.getChange(this.pair))}
+    </div>
     <volume-chart-element .pair=${this.pair}></volume-chart-element>
     `
+  }
+
+  protected updated(_changedProperties: Map<string | number | symbol, unknown>): void {
+    this.volumeChartElement.requestUpdate()
   }
 
   // requestUpdate(name?: PropertyKey, oldValue?: unknown, options?: PropertyDeclaration<unknown, unknown>): void {

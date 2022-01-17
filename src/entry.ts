@@ -4,12 +4,14 @@
 
 import './app-container'
 import './settings-dialog'
-import './KlinesManager'
 import './PairsManager'
+import './ChangesManager'
+import './KlinesManager'
 import './pair-tag'
 import './pair-strip'
 import './volume-chart-element'
 import './session-time-progress'
+import './refresh-timer'
 
 import '@material/mwc-snackbar'
 import '@material/mwc-button'

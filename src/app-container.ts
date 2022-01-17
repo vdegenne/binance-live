@@ -2,6 +2,7 @@ import { TextField } from '@material/mwc-textfield'
 import { css, html, LitElement, PropertyDeclaration } from 'lit'
 import { customElement, query, queryAll, state } from 'lit/decorators.js'
 import { PairStrip } from './pair-strip';
+import { RefreshTimer } from './refresh-timer';
 import { globalStyles } from './styles/global-styles'
 import { breakPair } from './util';
 
@@ -17,6 +18,7 @@ export class AppContainer extends LitElement {
 
   @query('#pairInput') pairInput!: TextField;
   @queryAll('pair-strip') pairStrips!: PairStrip[];
+  @query('refresh-timer') refreshTimer!: RefreshTimer;
 
   static styles = [
     globalStyles,
@@ -25,11 +27,17 @@ export class AppContainer extends LitElement {
   ]
 
   render () {
-    const pairs = window.klinesManager.getSortedPairsByProgressiveVolumes().map(i => {
-      let strip = new PairStrip
-      strip.pair = i[0]
-      return strip
+    const pairs = window.changesManager.getSortedPairsByChanges().map(i => {
+      return i[0]
     })
+    // const pairs = window.klinesManager.getSortedPairsByProgressiveVolumes().map(i => {
+    //   // let strip = new PairStrip
+    //   // strip.pair = i[0]
+    //   // return strip
+    //   return i[0]
+    // })
+
+    // console.log(pairs)
 
     return html`
     <session-time-progress></session-time-progress>
@@ -37,6 +45,10 @@ export class AppContainer extends LitElement {
     <header class="flex" style="align-items:flex-start;justify-content:space-between">
       <img src="./img/icon.png" width="68px" style="margin:8px 0 0 5px">
       <!-- <span style="flex:1">binance-live</span> -->
+    <div>
+      <span>${window.settingsDialog.settings.width} 🕯 (1🕯 = 1${window.settingsDialog.settings.unit.toLocaleUpperCase()})</span>
+      <refresh-timer></refresh-timer>
+    </div>
       <mwc-icon-button icon="settings"
         @click=${() => window.settingsDialog.open()}></mwc-icon-button>
     </header>
@@ -48,9 +60,14 @@ export class AppContainer extends LitElement {
         @click=${() => this.onAddPairButtonClick()}></mwc-icon-button>
     </div>
 
-    <div style="max-width:600px;margin:0 auto">${pairs}
+    <div style="max-width:600px;margin:0 auto">
+      ${pairs.map(p => html`<pair-strip .pair="${p} ${Date.now()}"></pair-strip>`)}
     </div>
     `
+  }
+
+  protected updated(_changedProperties: Map<string | number | symbol, unknown>): void {
+    this.refreshTimer.setTimer(window.settingsDialog.settings.refreshEvery)
   }
 
   protected firstUpdated(_changedProperties: Map<string | number | symbol, unknown>): void {
