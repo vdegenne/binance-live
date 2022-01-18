@@ -36,6 +36,9 @@ export class AppContainer extends LitElement {
   static styles = [
     globalStyles,
     css`
+    my-footer-element {
+      background-color: #0000007a;
+    }
     `
   ]
 

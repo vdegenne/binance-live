@@ -114,7 +114,6 @@ export class KlinesManager {
         candle = klines[i]
         next = klines[i + 1]
         nextIsLast = (i + 1) === (klines.length - 1)
-        console.log(i, nextIsLast)
         if (klineIsRed(candle)) {
           progression = 0
           continue;
@@ -125,9 +124,9 @@ export class KlinesManager {
         }
         progression++
       }
-      // if (klineIsRed(klines[i])) {
-      //   progression--;
-      // }
+      if (klineIsRed(klines[i])) {
+        progression--;
+      }
 
       return {
         pair,
