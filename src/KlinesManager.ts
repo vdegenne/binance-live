@@ -1,4 +1,4 @@
-import { close_index, fetchPairKlines, Kline, open_index, parseRawKlines, volume_index } from './klines';
+import { close_index, fetchPairKlines, Kline, klineIsRed, open_index, parseRawKlines, volume_index } from './klines';
 import ms from 'ms'
 import { breakPair } from './util';
 import { AppContainer } from './app-container';
@@ -109,24 +109,33 @@ export class KlinesManager {
 
   getSortedPairsByProgressiveVolumes (): [string, Kline[]][] {
     const map = Object.entries(this.klines).map(function ([pair, klines]) {
-      let candle, previous, i = 0
-      while (1) {
-        candle = klines[klines.length - 1 - (i)]
-        previous = klines[klines.length - 1 - (i + 1)]
-        if (candle[close_index] < candle[open_index])
-          break;
-        i++;
-        if (previous === undefined || candle[volume_index] < previous[volume_index])
-          break;
+      let candle, next, nextIsLast, i = -1, progression = 0
+      while (i++ < klines.length - 2) {
+        candle = klines[i]
+        next = klines[i + 1]
+        nextIsLast = (i + 1) === (klines.length - 1)
+        console.log(i, nextIsLast)
+        if (klineIsRed(candle)) {
+          progression = 0
+          continue;
+        }
+        if (next[volume_index] < candle[volume_index] && !nextIsLast) {
+          progression = 0
+          continue
+        }
+        progression++
       }
+      // if (klineIsRed(klines[i])) {
+      //   progression--;
+      // }
 
       return {
         pair,
-        progression: i,
+        progression,
         klines
       }
     })
-    // console.log(map)
+    console.log(map)
     return map.sort((a, b) => b.progression - a.progression).map(i => [i.pair, i.klines])
   }
 }

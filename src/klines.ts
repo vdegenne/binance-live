@@ -63,3 +63,10 @@ export async function fetchPairKlines(pair: string, unit: 'd' | 'h' | 'm' = 'd',
   const response = await fetch(url)
   return await response.json()
 }
+
+export function klineIsRed (kline: Kline) {
+  return kline[close_index] < kline[open_index]
+}
+export function klineIsGreen (kline: Kline) {
+  return !klineIsRed(kline)
+}
