@@ -5,6 +5,6 @@ import {terser} from 'rollup-plugin-terser'
 
 export default {
   input: 'src/entry.ts',
-  output: { file: 'public/app.js', format: 'esm' },
+  output: { file: 'docs/app.js', format: 'esm' },
   plugins: [cjs(), tsc(), resolve(), terser()]
 }

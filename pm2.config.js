@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: 'binance-live',
+    name: 'bi-reel',
     script: 'server.js',
     watch: 'server.js'
   }]

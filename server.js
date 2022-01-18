@@ -8,7 +8,7 @@ const app = new Koa
 const router = new Router
 
 app.use(koaBody())
-app.use(statics('public'))
+app.use(statics('docs'))
 
 router.get('/ping', function (ctx) {
   return ctx.body = 'pong'

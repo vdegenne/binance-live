@@ -7,8 +7,11 @@ import { percentToValue, valueToPercent } from './util';
 
 @customElement('volume-chart-element')
 export class VolumeChartElement extends LitElement {
+  @state()
+  state = 2
+  private _states = [[1, 0], [0, 1], [1, 0.6]]
 
-  @property()
+  @state()
   pair?: string;
 
   @property({ type: Number })
@@ -21,6 +24,7 @@ export class VolumeChartElement extends LitElement {
     justify-content: space-between;
     height: 50px;
     /* flex: 1; */
+    cursor: pointer;
   }
   .bar {
     min-width: 6px;
@@ -43,6 +47,7 @@ export class VolumeChartElement extends LitElement {
     display: flex;
     align-items: flex-end;
     height: 100%;
+    transition: opacity .3s linear;
   }
   `
 
@@ -58,11 +63,12 @@ export class VolumeChartElement extends LitElement {
     const min = Math.min(...klines.map(k => k[open_index]), ...klines.map(k => k[close_index]), ...klines.map(k => k[low_index]), ...klines.map(k => k[high_index]))
 
     return html`
-    <div class="bars-container">
+    <!-- PRICES -->
+    <div class="bars-container" style="opacity:${this._states[this.state][0]}">
     ${klines.map((k, i) => {
       // let styleMapProps: any = {}
       let backgroundColor, height, marginTop, marginBottom
-      const opacity = `${valueToPercent(klines.length, i) / 100}`
+      const opacity = `${valueToPercent(klines.length + 1, i + 1 + 1) / 100}`
       if (k[close_index] > k[open_index]) {
         backgroundColor = 'var(--green-color)'
         marginTop = percentToValue(50, valueToPercent(max - min, max - k[close_index]))
@@ -82,7 +88,8 @@ export class VolumeChartElement extends LitElement {
     })}
     </div>
 
-    <div class="bars-container" style="opacity:0.6">
+    <!-- VOLUMES -->
+    <div class="bars-container" style="opacity:${this._states[this.state][1]}">
     ${klines.map((k, i) => {
       const clazz = classMap({
         bar: true,
@@ -91,12 +98,20 @@ export class VolumeChartElement extends LitElement {
       })
       const stylez = styleMap({
         height: `${valueToPercent(highest, k[volume_index])}%`,
-        opacity: `${valueToPercent(klines.length, i)}%`
+        opacity: `${valueToPercent(klines.length + 1, i + 1 + 1)}%`
       })
 
       return html`<div class=${clazz} style=${stylez}></div>`
     })}
     </div>
     `
+  }
+
+  protected firstUpdated(_changedProperties: Map<string | number | symbol, unknown>): void {
+    this.addEventListener('click', () => {
+      if (++this.state > 2) {
+        this.state = 0
+      }
+    })
   }
 }

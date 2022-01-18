@@ -20,8 +20,23 @@ export class PairsManager {
     const pair = `${symbol}/${quote}`
     if (this.pairs.includes(pair)) { return }
     this.pairs.push(pair)
-    window.location.hash = `${window.location.hash},${pair}`
+    if (window.location.hash.length > 1) {
+      window.location.hash += ','
+    }
+    window.location.hash += pair
     return pair
+  }
+
+  deletePair(symbol: string, quote: string) {
+    symbol = symbol.toLocaleUpperCase()
+    quote = quote.toLocaleUpperCase()
+    const pair = `${symbol}/${quote}`
+    const index = this.pairs.indexOf(pair)
+    if (index < 0) {
+      return undefined
+    }
+    window.location.hash = window.location.hash.slice(1).split(',').filter(p => p !== pair).join(',')
+    return this.pairs.splice(index, 1)
   }
 
   loadPairs () {

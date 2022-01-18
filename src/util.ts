@@ -35,7 +35,7 @@ export function percentToValue (max: number, percent: number) {
 }
 
 
-export function openCryptowatchLink(pair: string) {
+export function openCryptowatch(pair: string) {
   const { symbol, quote } = breakPair(pair)!
   window.open(
     `https://cryptowat.ch/charts/binance:${symbol}-${quote}`,
@@ -43,17 +43,21 @@ export function openCryptowatchLink(pair: string) {
   )
 }
 
+export function change(a: number, b: number) {
+  return 100 * (b - a) / a;
+}
+
 
 export function percentTemplate (percent: string|number) {
   percent = round(parseFloat(percent as string))
-  const stylez = styleMap({
+  const style = styleMap({
     backgroundColor: percent === 0 ? 'grey' : (percent < 0 ? 'var(--red-color)' : 'var(--green-color)'),
     fontSize: '0.7em',
-    padding: '3px 4px',
+    padding: '2px 5px',
     borderRadius: '4px',
     color: percent >= 0 ? 'black' : 'white',
     marginLeft: '5px'
   })
 
-  return html`<span class="percent" style=${stylez}>${percent}%</span>`
+  return html`<span class="percent" style=${style}>${percent}%</span>`
 }

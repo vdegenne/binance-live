@@ -74,6 +74,7 @@ export class KlinesManager {
     ])
     // setTimeout(() => console.log(this.klines), 100)
     window.app.requestUpdate()
+    window.app.refreshTimer.setTimer(window.settingsDialog.settings.refreshEvery)
     this.initiateTimeout()
   }
 
