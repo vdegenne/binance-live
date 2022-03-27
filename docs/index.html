@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
 
     <link rel="icon" href="./img/favicon.png">
+
+    <link rel="manifest" href="./manifest.json" />
   </head>
   <body>
     <style>
@@ -53,6 +55,10 @@
         snackbar.labelText = labelText;
         snackbar.timeoutMs = timeoutMs;
         snackbar.open = true;
+      }
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js');
       }
     </script>
   </body>
