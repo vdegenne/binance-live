@@ -2,6 +2,7 @@ import { Dialog } from '@material/mwc-dialog';
 import { css, html, LitElement } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { globalStyles } from './styles/global-styles';
+import '@material/mwc-slider'
 
 declare global {
   interface Window {
@@ -18,9 +19,9 @@ export type Settings = {
 @customElement('settings-dialog')
 export class SettingsDialog extends LitElement {
   // @state()
-  public settings: Settings = this.default;
+  public settings: Settings = this.default; // real settings
   @state()
-  private _settings: Settings = this.default;
+  private _settings: Settings = this.default; // modified settings in the view
 
   @query('mwc-dialog') dialog!: Dialog;
 
@@ -55,6 +56,13 @@ export class SettingsDialog extends LitElement {
     mwc-textfield, mwc-select {
       margin: 8px 0;
     }
+
+    #info span {
+      min-width: 23px;
+    display: inline-block;
+    text-align: center;
+    font-weight: 600;
+    }
   `]
 
   get default (): Settings {
@@ -80,20 +88,32 @@ export class SettingsDialog extends LitElement {
           <mwc-list-item value="d">day</mwc-list-item>
         </mwc-select>
 
-        <mwc-textfield outlined label="width" type="number"
+        <p><span class=title>Width</span> (how many candles to display)</p>
+        <mwc-slider
+          discrete
+          withTickMarks
+          step=1
+          min=2
+          max=30
+          value=${this._settings.width}
+          style="--mdc-theme-on-primary:var(--green-color)"
+          @input=${e=>{this._settings.width=e.detail.value;this.requestUpdate()}}
+        ></mwc-slider>
+
+        <!-- <mwc-textfield outlined label="width" type="number"
           placeholder="how many candles to fetch"
           value=${this._settings.width}
-          @keyup=${e=>{ this._settings.width=parseInt(e.target.value);this.requestUpdate() }}></mwc-textfield>
+          @keyup=${e=>{ this._settings.width=parseInt(e.target.value);this.requestUpdate() }}></mwc-textfield> -->
 
         <div class="title">Updater</div>
         <mwc-textfield outlined label="refresh frequency (in seconds)" type="number"
           value=${this._settings.refreshEvery}
-          @keyup=${e=>{ this._settings.refreshEvery=parseInt(e.target.value);this.requestUpdate() }}></mwc-textfield>
+          @change=${e=>{ this._settings.refreshEvery=parseInt(e.target.value);this.requestUpdate()}}></mwc-textfield>
 
 
-        <div style="margin-top:24px" class="flex">
+        <div id=info style="margin-top:24px" class="flex">
           <mwc-icon style="margin-right:6px">info</mwc-icon>
-          <span>Fetching ${constrained.width} candles (1 candle = 1 ${{m: 'minute', h: 'hour', d: 'day'}[constrained.unit]}) every ${constrained.refreshEvery} seconds.</span>
+          <div>Fetching <span>${constrained.width}</span> candles (1 candle = 1 ${{m: 'minute', h: 'hour', d: 'day'}[constrained.unit]}) every ${constrained.refreshEvery} seconds.</div>
         </div>
       </div>
 
@@ -121,6 +141,7 @@ export class SettingsDialog extends LitElement {
     this.dialog.addEventListener('opened', () => {
       this.shadowRoot!.querySelector('mwc-select')!.layout()
       this.shadowRoot!.querySelectorAll('mwc-textfield')!.forEach(el => el.layout())
+      this.shadowRoot!.querySelectorAll('mwc-slider')!.forEach(el=>el.layout())
     })
   }
 

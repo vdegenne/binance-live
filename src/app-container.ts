@@ -67,7 +67,7 @@ export class AppContainer extends LitElement {
     </header>
 
     <div class="flex" style="margin:24px 12px;">
-      <mwc-textfield id="pairInput" placeholder="add pairname (e.g. BTC/USDT)"
+      <mwc-textfield id="pairInput" placeholder="add pairname (e.g. BTC/USDT)" style="--mdc-text-field-fill-color: #00ff142b;"
         @keyup=${e => e.key === 'Enter' && this.onAddPairButtonClick()}></mwc-textfield>
       <mwc-icon-button icon="add" style="margin:7px"
         @click=${() => this.onAddPairButtonClick()}></mwc-icon-button>

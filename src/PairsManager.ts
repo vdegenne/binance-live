@@ -19,11 +19,13 @@ export class PairsManager {
     quote = quote.toLocaleUpperCase()
     const pair = `${symbol}/${quote}`
     if (this.pairs.includes(pair)) { return }
+    // OLD
+    // if (window.location.hash.length > 1) {
+    //   window.location.hash += ','
+    // }
+    // window.location.hash += pair
     this.pairs.push(pair)
-    if (window.location.hash.length > 1) {
-      window.location.hash += ','
-    }
-    window.location.hash += pair
+    this.save()
     return pair
   }
 
@@ -35,19 +37,24 @@ export class PairsManager {
     if (index < 0) {
       return undefined
     }
-    window.location.hash = window.location.hash.slice(1).split(',').filter(p => p !== pair).join(',')
-    return this.pairs.splice(index, 1)
+    // window.location.hash = window.location.hash.slice(1).split(',').filter(p => p !== pair).join(',')
+    this.pairs.splice(index, 1)
+    this.save()
+    return this.pairs
   }
 
   loadPairs () {
-    let hash = window.location.hash.slice(1)
-    if (hash) {
-      this.pairs = hash.split(',')
-      // console.log(this.pairs)
-    }
-    // if (localStorage.getItem('pairs'))  {
-    //   this.pairs = JSON.parse(localStorage.getItem('pairs')!.toString())
+    // OLD
+    // let hash = window.location.hash.slice(1)
+    // if (hash) {
+    //   this.pairs = hash.split(',')
     // }
+
+    // LOCALSTORAGE
+    if (localStorage.getItem('binance-live:pairs'))  {
+      this.pairs = JSON.parse(localStorage.getItem('binance-live:pairs')!.toString())
+    }
+    // console.log(this.pairs)
   }
 
   async fetchAvailablePairs () {
@@ -64,7 +71,9 @@ export class PairsManager {
   }
 
   save () {
-    localStorage.setItem('pairs', JSON.stringify(this.pairs))
+
+    // LOCALSTORAGE
+    localStorage.setItem('binance-live:pairs', JSON.stringify(this.pairs))
   }
 }
 

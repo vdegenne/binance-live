@@ -8,6 +8,7 @@
     "@material/mwc-linear-progress": "^0.25.3",
     "@material/mwc-menu": "^0.25.3",
     "@material/mwc-select": "^0.25.3",
+    "@material/mwc-slider": "^0.25.3",
     "@material/mwc-snackbar": "^0.25.3",
     "@material/mwc-tab-bar": "^0.25.3",
     "@material/mwc-textarea": "^0.25.3",
@@ -29,6 +30,7 @@
     "build": "rollup -c --environment minify",
     "watch": "rollup -cw",
     "watch:server": "pm2 start pm2.config.js",
+    "browser-sync:static": "browser-sync ./docs --files docs/app.js --no-notify",
     "browser-sync": "browser-sync start --proxy http://localhost:36231/ --files docs/app.js --no-notify"
   },
   "dependencies": {
