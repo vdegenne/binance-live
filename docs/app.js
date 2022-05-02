@@ -489,7 +489,7 @@ let Gt=class extends Ut{};Gt.styles=[Ue],Gt=l([be("mwc-slider")],Gt);let Xt=clas
           withTickMarks
           step=1
           min=2
-          max=30
+          max=100
           value=${this._settings.width}
           style="--mdc-theme-on-primary:var(--green-color)"
           @input=${e=>{this._settings.width=e.detail.value,this.requestUpdate()}}

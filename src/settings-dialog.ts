@@ -94,7 +94,7 @@ export class SettingsDialog extends LitElement {
           withTickMarks
           step=1
           min=2
-          max=30
+          max=100
           value=${this._settings.width}
           style="--mdc-theme-on-primary:var(--green-color)"
           @input=${e=>{this._settings.width=e.detail.value;this.requestUpdate()}}
