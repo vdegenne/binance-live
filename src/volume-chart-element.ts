@@ -17,12 +17,14 @@ export class VolumeChartElement extends LitElement {
   @property({ type: Number })
   private maxWidth = 50;
 
+  @property({type: Number})
+  elementHeight = 100
+
   static styles = css`
   :host {
     position: relative;
     display: flex;
     justify-content: space-between;
-    height: 50px;
     /* flex: 1; */
     cursor: pointer;
   }
@@ -63,6 +65,12 @@ export class VolumeChartElement extends LitElement {
     const min = Math.min(...klines.map(k => k[open_index]), ...klines.map(k => k[close_index]), ...klines.map(k => k[low_index]), ...klines.map(k => k[high_index]))
 
     return html`
+    <style>
+      :host {
+        height: ${this.elementHeight}px;
+      }
+    </style>
+
     <!-- PRICES -->
     <div class="bars-container" style="opacity:${this._states[this.state][0]}">
     ${klines.map((k, i) => {
@@ -71,16 +79,16 @@ export class VolumeChartElement extends LitElement {
       const opacity = `${valueToPercent(klines.length + 1, i + 1 + 1) / 100}`
       if (k[close_index] > k[open_index]) {
         backgroundColor = 'var(--green-color)'
-        marginTop = percentToValue(50, valueToPercent(max - min, max - k[close_index]))
-        marginBottom = percentToValue(50, valueToPercent(max - min, k[open_index] - min))
+        marginTop = percentToValue(this.elementHeight, valueToPercent(max - min, max - k[close_index]))
+        marginBottom = percentToValue(this.elementHeight, valueToPercent(max - min, k[open_index] - min))
       }
       else {
         backgroundColor = 'var(--red-color)'
-        marginTop = percentToValue(50, valueToPercent(max - min, max - k[open_index]))
-        marginBottom = percentToValue(50, valueToPercent(max - min, k[close_index] - min))
+        marginTop = percentToValue(this.elementHeight, valueToPercent(max - min, max - k[open_index]))
+        marginBottom = percentToValue(this.elementHeight, valueToPercent(max - min, k[close_index] - min))
       }
 
-      height = `${50 - marginTop - marginBottom}px`
+      height = `${this.elementHeight - marginTop - marginBottom}px`
       marginTop = `${marginTop}px`
       marginBottom = `${marginBottom}px`
 

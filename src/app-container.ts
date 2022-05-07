@@ -82,7 +82,7 @@ export class AppContainer extends LitElement {
       ${pairs.map(p => html`<pair-strip .pair="${p} ${Date.now()}"></pair-strip>`)}
     </div>
 
-    <my-footer-element style="position:fixed;bottom:0" @copied=${() => window.toast('bitcoin address copied')}></my-footer-element>
+    <!-- <my-footer-element style="position:fixed;bottom:0" @copied=${() => window.toast('bitcoin address copied')}></my-footer-element> -->
     `
   }
 

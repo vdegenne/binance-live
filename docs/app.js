@@ -149,7 +149,7 @@ mwc-textfield, mwc-select {
       ${e.map((e=>B`<pair-strip .pair="${e} ${Date.now()}"></pair-strip>`))}
     </div>
 
-    <my-footer-element style="position:fixed;bottom:0" @copied=${()=>window.toast("bitcoin address copied")}></my-footer-element>
+    <!-- <my-footer-element style="position:fixed;bottom:0" @copied=${()=>window.toast("bitcoin address copied")}></my-footer-element> -->
     `}onChartDisplayTypeClick(e){"prices"===e.target.label?(e.target.label="volumes",this.pairStrips.forEach((e=>e.volumeChartElement.state=1))):"volumes"===e.target.label?(e.target.label="mixed",this.pairStrips.forEach((e=>e.volumeChartElement.state=2))):(e.target.label="prices",this.pairStrips.forEach((e=>e.volumeChartElement.state=0)))}updated(e){}firstUpdated(e){window.klinesManager.update()}async onAddPairButtonClick(){let e=this.pairInput.value;if(""===e)return;let[t,s]=e.toUpperCase().split("/");s||(s="USDT"),window.pairsManager.pairExists(t,s)?(window.pairsManager.addPair(t,s),await window.klinesManager.updatePair(`${t}/${s}`),this.requestUpdate(),this.pairInput.value="",window.toast(`Pair ${t}/${s} added`),window.pairsManager.save()):window.toast("This pair is unavailable")}updateStrip(e){if(null===De(e))return;const t=[...this.pairStrips].find((t=>t.pair===e));t&&t.requestUpdate()}};He.styles=[Ce,le`
     my-footer-element {
       background-color: #0000007a;
@@ -879,10 +879,16 @@ const kl=le`mwc-list ::slotted([mwc-list-item]:not([twoline])),mwc-list ::slotte
     border-radius: 4px;
     background-color: #001401;
   }
-  `,l([Ee()],xl.prototype,"pair",void 0),l([ke("volume-chart-element")],xl.prototype,"volumeChartElement",void 0),l([ke("#price-frame")],xl.prototype,"priceFrame",void 0),l([ke("mwc-menu")],xl.prototype,"menu",void 0),xl=l([be("pair-strip")],xl);let Cl=class extends fe{constructor(){super(...arguments),this.state=2,this._states=[[1,0],[0,1],[1,.6]],this.maxWidth=50}render(){if(void 0===this.pair||void 0===window.klinesManager.klines[this.pair])return P;const e=window.klinesManager.klines[this.pair].slice(-this.maxWidth),t=Math.max(...e.map((e=>e[5]))),s=Math.max(...e.map((e=>e[1])),...e.map((e=>e[4])),...e.map((e=>e[3])),...e.map((e=>e[2]))),l=Math.min(...e.map((e=>e[1])),...e.map((e=>e[4])),...e.map((e=>e[3])),...e.map((e=>e[2])));return B`
+  `,l([Ee()],xl.prototype,"pair",void 0),l([ke("volume-chart-element")],xl.prototype,"volumeChartElement",void 0),l([ke("#price-frame")],xl.prototype,"priceFrame",void 0),l([ke("mwc-menu")],xl.prototype,"menu",void 0),xl=l([be("pair-strip")],xl);let Cl=class extends fe{constructor(){super(...arguments),this.state=2,this._states=[[1,0],[0,1],[1,.6]],this.maxWidth=50,this.elementHeight=100}render(){if(void 0===this.pair||void 0===window.klinesManager.klines[this.pair])return P;const e=window.klinesManager.klines[this.pair].slice(-this.maxWidth),t=Math.max(...e.map((e=>e[5]))),s=Math.max(...e.map((e=>e[1])),...e.map((e=>e[4])),...e.map((e=>e[3])),...e.map((e=>e[2]))),l=Math.min(...e.map((e=>e[1])),...e.map((e=>e[4])),...e.map((e=>e[3])),...e.map((e=>e[2])));return B`
+    <style>
+      :host {
+        height: ${this.elementHeight}px;
+      }
+    </style>
+
     <!-- PRICES -->
     <div class="bars-container" style="opacity:${this._states[this.state][0]}">
-    ${e.map(((t,i)=>{let o,n,a,r;const c=""+Be(e.length+1,i+1+1)/100;return t[4]>t[1]?(o="var(--green-color)",a=Me(50,Be(s-l,s-t[4])),r=Me(50,Be(s-l,t[1]-l))):(o="var(--red-color)",a=Me(50,Be(s-l,s-t[1])),r=Me(50,Be(s-l,t[4]-l))),n=50-a-r+"px",a=`${a}px`,r=`${r}px`,B`<div class="bar" style=${_e({backgroundColor:o,height:n,marginTop:a,marginBottom:r,opacity:c})}></div>`}))}
+    ${e.map(((t,i)=>{let o,n,a,r;const c=""+Be(e.length+1,i+1+1)/100;return t[4]>t[1]?(o="var(--green-color)",a=Me(this.elementHeight,Be(s-l,s-t[4])),r=Me(this.elementHeight,Be(s-l,t[1]-l))):(o="var(--red-color)",a=Me(this.elementHeight,Be(s-l,s-t[1])),r=Me(this.elementHeight,Be(s-l,t[4]-l))),n=this.elementHeight-a-r+"px",a=`${a}px`,r=`${r}px`,B`<div class="bar" style=${_e({backgroundColor:o,height:n,marginTop:a,marginBottom:r,opacity:c})}></div>`}))}
     </div>
 
     <!-- VOLUMES -->
@@ -894,7 +900,6 @@ const kl=le`mwc-list ::slotted([mwc-list-item]:not([twoline])),mwc-list ::slotte
     position: relative;
     display: flex;
     justify-content: space-between;
-    height: 50px;
     /* flex: 1; */
     cursor: pointer;
   }
@@ -921,7 +926,7 @@ const kl=le`mwc-list ::slotted([mwc-list-item]:not([twoline])),mwc-list ::slotte
     height: 100%;
     transition: opacity .3s linear;
   }
-  `,l([Ee()],Cl.prototype,"state",void 0),l([Ee()],Cl.prototype,"pair",void 0),l([Ae({type:Number})],Cl.prototype,"maxWidth",void 0),Cl=l([be("volume-chart-element")],Cl);let Ol=class extends fe{render(){let e;switch(window.settingsDialog.settings.unit){case"h":e=Be(60,(new Date).getMinutes())/100;break;case"m":e=Be(60,(new Date).getSeconds())/100}return B`
+  `,l([Ee()],Cl.prototype,"state",void 0),l([Ee()],Cl.prototype,"pair",void 0),l([Ae({type:Number})],Cl.prototype,"maxWidth",void 0),l([Ae({type:Number})],Cl.prototype,"elementHeight",void 0),Cl=l([be("volume-chart-element")],Cl);let Ol=class extends fe{render(){let e;switch(window.settingsDialog.settings.unit){case"h":e=Be(60,(new Date).getMinutes())/100;break;case"m":e=Be(60,(new Date).getSeconds())/100}return B`
     <mwc-linear-progress progress=${e}></mwc-linear-progress>
     `}firstUpdated(e){window.setInterval((()=>this.requestUpdate()),1e3)}};Ol.styles=le`
   mwc-linear-progress {
