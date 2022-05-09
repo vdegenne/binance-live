@@ -879,7 +879,7 @@ const kl=le`mwc-list ::slotted([mwc-list-item]:not([twoline])),mwc-list ::slotte
     border-radius: 4px;
     background-color: #001401;
   }
-  `,l([Ee()],xl.prototype,"pair",void 0),l([ke("volume-chart-element")],xl.prototype,"volumeChartElement",void 0),l([ke("#price-frame")],xl.prototype,"priceFrame",void 0),l([ke("mwc-menu")],xl.prototype,"menu",void 0),xl=l([be("pair-strip")],xl);let Cl=class extends fe{constructor(){super(...arguments),this.state=2,this._states=[[1,0],[0,1],[1,.6]],this.maxWidth=50,this.elementHeight=100}render(){if(void 0===this.pair||void 0===window.klinesManager.klines[this.pair])return P;const e=window.klinesManager.klines[this.pair].slice(-this.maxWidth),t=Math.max(...e.map((e=>e[5]))),s=Math.max(...e.map((e=>e[1])),...e.map((e=>e[4])),...e.map((e=>e[3])),...e.map((e=>e[2]))),l=Math.min(...e.map((e=>e[1])),...e.map((e=>e[4])),...e.map((e=>e[3])),...e.map((e=>e[2])));return B`
+  `,l([Ee()],xl.prototype,"pair",void 0),l([ke("volume-chart-element")],xl.prototype,"volumeChartElement",void 0),l([ke("#price-frame")],xl.prototype,"priceFrame",void 0),l([ke("mwc-menu")],xl.prototype,"menu",void 0),xl=l([be("pair-strip")],xl);let Cl=class extends fe{constructor(){super(...arguments),this.state=2,this._states=[[1,0],[0,1],[1,.6]],this.maxWidth=50,this.elementHeight=50}render(){if(void 0===this.pair||void 0===window.klinesManager.klines[this.pair])return P;const e=window.klinesManager.klines[this.pair].slice(-this.maxWidth),t=Math.max(...e.map((e=>e[5]))),s=Math.max(...e.map((e=>e[1])),...e.map((e=>e[4])),...e.map((e=>e[3])),...e.map((e=>e[2]))),l=Math.min(...e.map((e=>e[1])),...e.map((e=>e[4])),...e.map((e=>e[3])),...e.map((e=>e[2])));return B`
     <style>
       :host {
         height: ${this.elementHeight}px;

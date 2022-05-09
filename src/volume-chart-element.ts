@@ -18,7 +18,7 @@ export class VolumeChartElement extends LitElement {
   private maxWidth = 50;
 
   @property({type: Number})
-  elementHeight = 100
+  elementHeight = 50
 
   static styles = css`
   :host {
