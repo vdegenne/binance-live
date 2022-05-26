@@ -49,7 +49,7 @@ export class VolumeChartElement extends LitElement {
     display: flex;
     align-items: flex-end;
     height: 100%;
-    transition: opacity .3s linear;
+    /* transition: opacity .3s linear; */
   }
   `
 
@@ -72,7 +72,7 @@ export class VolumeChartElement extends LitElement {
     </style>
 
     <!-- PRICES -->
-    <div class="bars-container" style="opacity:${this._states[this.state][0]}">
+    <div class="bars-container" style="opacity:${this._states[this.state][0]};opacity:var(--prices-opacity)">
     ${klines.map((k, i) => {
       // let styleMapProps: any = {}
       let backgroundColor, height, marginTop, marginBottom
@@ -97,7 +97,7 @@ export class VolumeChartElement extends LitElement {
     </div>
 
     <!-- VOLUMES -->
-    <div class="bars-container" style="opacity:${this._states[this.state][1]}">
+    <div class="bars-container" style="opacity:${this._states[this.state][1]};opacity:var(--volumes-opacity)">
     ${klines.map((k, i) => {
       const clazz = classMap({
         bar: true,
@@ -116,6 +116,7 @@ export class VolumeChartElement extends LitElement {
   }
 
   protected firstUpdated(_changedProperties: Map<string | number | symbol, unknown>): void {
+    return
     this.addEventListener('click', () => {
       if (++this.state > 2) {
         this.state = 0
