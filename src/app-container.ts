@@ -5,9 +5,11 @@ import { PairStrip } from './pair-strip';
 import { RefreshTimer } from './refresh-timer';
 import { globalStyles } from './styles/global-styles'
 import { breakPair } from './util';
-import '@vdegenne/my-footer-element'
 import { PairCreateDialog } from './pair-create-dialog';
 import { Slider } from '@material/mwc-slider';
+import '@material/mwc-slider/slider-range'
+import '@vdegenne/my-footer-element'
+// import { SliderRange } from '@material/mwc-slider/slider-range';
 
 declare global {
   interface Window {
@@ -67,24 +69,24 @@ export class AppContainer extends LitElement {
       <refresh-timer></refresh-timer>
     </div>
       <div style="display:flex;align-items:center">
-        <mwc-button outlined icon="add"
-          @click=${()=>{this.pairCreateDialog.show()}}>new pair</mwc-button>
+        <mwc-icon-button outlined icon="add"
+          @click=${()=>{this.pairCreateDialog.show()}}></mwc-icon-button>
         <mwc-icon-button icon="settings"
           @click=${() => window.settingsDialog.open()}></mwc-icon-button>
       </div>
     </header>
 
-    <div style="display:flex;align-items:center;margin:18px 71px">
-      <mwc-icon style="opacity:0.5">leaderboard</mwc-icon>
+    <div style="display:flex;align-items:center;padding:0 18px;max-width:640px;margin:41px auto;">
+      <mwc-icon style="opacity:0.7">leaderboard</mwc-icon>
       <mwc-slider
         min=-100
         step=1
         max=100
         value=0
         style="flex:1;--mdc-theme-on-primary:var(--green-color)"
-        @input=${()=>{this.updateOpacityStyles()}}
+        @input=${(e)=>{this.onOpacitySliderInput(e)}}
       ></mwc-slider>
-      <mwc-icon style="opacity:0.5">show_chart</mwc-icon>
+      <mwc-icon style="opacity:0.7">show_chart</mwc-icon>
     </div>
 
     <div style="max-width:600px;margin:0 auto 128px">
@@ -102,7 +104,16 @@ export class AppContainer extends LitElement {
     `
   }
 
+  _sliderInputDebouncer
+  onOpacitySliderInput(e: CustomEvent) {
+    if (this._sliderInputDebouncer) {
+      clearTimeout(this._sliderInputDebouncer)
+    }
+    this._sliderInputDebouncer = setTimeout(this.updateOpacityStyles.bind(this), 5)
+  }
+
   updateOpacityStyles() {
+    // console.log(this.opacitySlider.value)
     let value = this.opacitySlider.value
     let pricesOpacity, volumesOpacity
     if (value <= 0) {
@@ -137,9 +148,12 @@ export class AppContainer extends LitElement {
     // this.refreshTimer.setTimer(window.settingsDialog.settings.refreshEvery)
   }
 
-  protected firstUpdated(_changedProperties: Map<string | number | symbol, unknown>): void {
+  protected async firstUpdated(_changedProperties: Map<string | number | symbol, unknown>): Promise<void> {
     window.klinesManager.update()
-    setTimeout(()=>this.opacitySlider.layout(), 200)
+    let sliderAvailable = false
+    await this.opacitySlider.updateComplete
+    ;(this.opacitySlider.shadowRoot!.querySelector('.mdc-slider__track--active_fill') as HTMLElement).style.borderColor = 'transparent'
+    setTimeout(()=>this.opacitySlider.layout(), 150)
   }
 
   async addPair(input: string) {
